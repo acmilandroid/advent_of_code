@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    free(num_array);
     printf("No sum found. Exiting...\n");
     return 0;
 

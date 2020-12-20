@@ -1,3 +1,4 @@
+
 // advent calendar day 1
 
 #define TYPE 3

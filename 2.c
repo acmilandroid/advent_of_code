@@ -1,5 +1,6 @@
 // advent calendar day 2
 
+#define PART 2
 #define SIZE 1000
 #define SUM 2020
 #include <stdio.h>
@@ -7,6 +8,7 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
+     int i, count;
 
     //check input
     if (argc != 2) {
@@ -20,27 +22,37 @@ int main(int argc, char **argv) {
     }
 
     //allocate space for array
-    int *num_array = calloc(sizeof(int), SIZE);
+    int *begin_index = calloc(sizeof(int), SIZE);
+    int *end_index = calloc(sizeof(int), SIZE);
+    char trash;
+    char *letter = calloc(sizeof(char), SIZE);
+    char **pw = calloc(sizeof(char *), SIZE);
+    for (i = 0; i < SIZE; i++) {
+        pw[i] = calloc(sizeof(char), SIZE);
+    }
 
     //read file
     int lines = 0;
-    while (fscanf(fpt, "%d", &num_array[lines]) == 1) {
-        lines++;
-    }
-
-    //2 sum algorithm
-    int i, j;
-    for (i = 0; i < lines; i++) {
-        for (j = i+1; j < lines; j++) {
-            if (num_array[i] + num_array[j] == SUM) {
-                printf("%d + %d = %d\n", num_array[i], num_array[j], SUM);
-                printf("product: %d\n", num_array[i]*num_array[j]);
-                exit(0);
+    int valid = 0;
+    while (fscanf(fpt, "%d%c%d %c%c %s\n", &begin_index[lines], &trash, &end_index[lines], &letter[lines], &trash, pw[lines]) == 6) {
+        printf("%d %c %d %c %c %s\n", begin_index[lines], trash, end_index[lines], letter[lines], trash, pw[lines]);
+        
+        // check pw conditions
+        if (PART == 1) {   
+            count = 0;
+            for (i = 0; i < strlen(pw[lines]); i++) {
+                if (pw[lines][i] == letter[lines]) count++;
             }
+            if (count >= begin_index[lines] && count <= end_index[lines]) valid++;
+        } else {
+            if (pw[lines][begin_index[lines]-1] == letter[lines] && pw[lines][end_index[lines]-1] != letter[lines]) valid++;
+            else if (pw[lines][begin_index[lines]-1] != letter[lines] && pw[lines][end_index[lines]-1] == letter[lines]) valid++;
         }
+
+        lines++;    
     }
 
-    printf("No sum found. Exiting...\n");
+    printf("Total valid pws: %d\n", valid);
     return 0;
 
 }
